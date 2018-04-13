@@ -1,0 +1,106 @@
+<!--
+//http://ife.baidu.com/course/detail/id/103
+
+//如图，模拟一个队列，队列的每个元素是一个数字，初始队列为空
+//有一个input输入框，以及4个操作按钮
+//
+//点击"左侧入"，将input中输入的数字从左侧插入队列中；
+//点击"右侧入"，将input中输入的数字从右侧插入队列中；
+//点击"左侧出"，读取并删除队列左侧第一个元素，并弹窗显示元素中数值；
+//点击"右侧出"，读取并删除队列又侧第一个元素，并弹窗显示元素中数值；
+//点击队列中任何一个元素，则该元素会被从队列中删除
+-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<style>
+	ul {
+		padding-left: 0;
+	}
+
+	li {
+		list-style: none;
+		background: red;
+		display: inline-block;
+		padding: 0 10px;
+		margin: 0 4px;
+	}
+
+</style>
+
+<body>
+	<input type="text" id="input">
+	<button id="unshift">左侧入</button>
+	<button id="push">右侧入</button>
+	<button id="shift">左侧出</button>
+	<button id="pop">右侧出</button>
+	<ul id="display">
+		<!--		<li>1</li>-->
+		<!--		<li>2</li>-->
+	</ul>
+</body>
+<script>
+	(function() {
+		let arr = [1, 2, 3];
+		render(arr);
+
+		function render(arr) {
+			let docfrag = document.createDocumentFragment();
+			arr.forEach(function(v) {
+				let li = document.createElement('li');
+				li.innerHTML = v;
+				docfrag.appendChild(li);
+			});
+
+			let ul = document.getElementsByTagName('ul')[0];
+			let ulParent = ul.parentNode;
+			ulParent.removeChild(ul);
+			let newUl = document.createElement('ul');
+			newUl.appendChild(docfrag);
+			ulParent.appendChild(newUl);
+
+			document.querySelectorAll('li').forEach(function(v) {
+				v.addEventListener('click', function(e) {
+					let vv = v.innerText;
+					let i = arr.findIndex(function(ii) {
+						return ii == vv;
+					});
+					arr.splice(i, 1);
+					render(arr);
+				}, false)
+			});
+		}
+		document.querySelectorAll('button').forEach(function(v) {
+			v.addEventListener('click', function() {
+				fn(v.id);
+			}, false);
+		});
+
+		function fn(type) {
+			if (type == 'shift') {
+				alert('shift:' + arr[0]);
+				arr[type]();
+			} else if (type == 'pop') {
+				alert('pop:' + arr[arr.length - 1]);
+				arr[type]();
+			} else {
+				let currentValue = document.getElementById('input').value;
+				if (currentValue) {
+					arr[type](currentValue);
+				} else {
+					alert('currentValue none')
+				}
+			}
+			render(arr);
+		}
+	})();
+
+</script>
+
+</html>
